@@ -131,7 +131,16 @@
                                                         <span>{{employer.id}}</span>
                                                         </td>
                                                         <td>
-                                                            <p class="mb-0"><i class="mdi mdi-square-rounded font-size-10 text-{% if employer.come %}success{% else %}danger{% endif %} me-2"></i>{% if employer.come %}Come in{% else %}Come out{% endif %}</p>
+                                                            <p class="mb-0">
+                                                                <i class="mdi mdi-square-rounded font-size-10 text-{% if employer.come %}success{% else %}danger{% endif %} me-2"></i>
+                                                                {% if employer.come %} 
+                                                                    <i class="uil-user-plus text-success"></i> 
+                                                                    <b class="text-success">Come in</b>
+                                                                {% else %} 
+                                                                    <i class="uil-user-minus text-danger"></i> 
+                                                                    <b class="text-danger">Come out</i>
+                                                                {% endif %}
+                                                            </p>
                                                         </td>
                                                     </tr>                                                     
                                                     {% endfor %}

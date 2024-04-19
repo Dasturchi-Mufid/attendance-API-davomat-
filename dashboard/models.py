@@ -1,8 +1,30 @@
 from django.db import models
 from django.core.files.storage import default_storage
 from datetime import datetime
+from random import sample
+import string
 
-class Employee(models.Model):
+
+class CodeGenerate(models.Model):
+    code = models.CharField(max_length=255, blank=True)
+    
+    @staticmethod
+    def generate_code():
+        return ''.join(sample(string.ascii_letters + string.digits, 15)) 
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            while True:
+                code = self.generate_code()
+                if not self.__class__.objects.filter(code=code).count():
+                    self.code = code
+                    break
+        super(CodeGenerate,self).save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+class Employee(CodeGenerate):
     """
     Model representing an employee.
 
@@ -26,7 +48,7 @@ class Employee(models.Model):
         )
     )
     avatar = models.ImageField(upload_to='avatars/')
-    date_of_joining = models.DateField()
+    date_of_joining = models.DateField(auto_now_add=True)
     date_of_leaving = models.DateField(null=True, blank=True)
 
     def __str__(self):
@@ -44,7 +66,7 @@ class Employee(models.Model):
             default_storage.delete(avatar_path)
         super(Employee, self).delete()
 
-class Attendance(models.Model):
+class Attendance(CodeGenerate):
     """
     Model representing employee attendance.
 

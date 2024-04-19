@@ -1,0 +1,212 @@
+{% extends 'dashboard/base.html' %}
+
+
+{% block content %}
+    <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <h5 class="card-title">Employee List <span class="text-muted fw-normal ms-2">({{employers|length}})</span></h5>
+                                                </div>
+                                            </div><!-- end col -->
+                
+                                            <div class="col-md-6">
+                                                <div class="d-flex flex-wrap align-items-start justify-content-md-end mt-2 mt-md-0 gap-2 mb-3">
+                                                    <div>
+                                                        <a href="#" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addContactModal"><i class="uil uil-plus me-1"></i> Add New</a>
+                                                    </div>
+                                                </div>
+                                            </div><!-- end col -->
+                                        </div><!-- end row -->
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="addContactModal" tabindex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addContactModalLabel">Add Contact</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <!-- end modalheader -->
+                                                    <div class="modal-body p-4">
+                                                        <form method="post" action="{% url 'create_employee' %}" enctype="multipart/form-data">
+                                                            {% csrf_token %}
+                                                            <div class="mb-3">
+                                                                <label for="addcontact-name-input" class="form-label">Name</label>
+                                                                <input type="text" class="form-control" id="addcontact-name-input" placeholder="Enter Name" name="name" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="addcontact-designation-input" class="form-label">Status</label>
+                                                                <div class="col-md-10">
+                                                                    <select class="form-control" name="status" required>
+                                                                        <option value="" disabled selected>...</option>
+                                                                        {% for value, label in choices %}
+                                                                        <option value="{{value}}">{{label}}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="addcontact-file-input" class="form-label">User Image</label>
+                                                                <input type="file" class="form-control" id="addcontact-file-input" name="avatar" accept="image/*" required>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light w-sm" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary w-sm">Add</button>
+                                                            </div>
+                                                            <!-- end modalfooter -->
+                                                        </form>
+                                                    </div>
+                                                    <!-- end modalbody -->
+                                                </div><!-- end content -->
+                                            </div>
+                                        </div>
+                                        <!-- end modal -->
+
+                                        <div class="table-responsive">
+                                            <table class="table align-middle table-nowrap table-check">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col" style="width: 50px;">
+                                                            №
+                                                        </th>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Status</th>
+                                                        <th style="width: 80px; min-width: 80px;">Action</th>
+                                                    </tr><!-- end tr -->
+                                                </thead><!-- end thead -->
+                                                <tbody>
+                                                    {% for i in employers %}
+                                                    <tr>
+                                                        <th scope="row">
+                                                            {{forloop.counter}}
+                                                        </th>
+                                                        <td>
+                                                            <img src="{{i.avatar.url}}" alt="" class="avatar-sm rounded-circle me-2">
+                                                            <a class="text-body fw-medium">{{i.name}}</a>
+                                                        </td>
+                                                        <td><span class="badge badge-soft-primary mb-0">{{i.get_status_display}}</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="uil uil-ellipsis-h"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                                    <li><a class="dropdown-item" href="{% url 'edit_employee' i.code %}">Edit</a></li>
+                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                                        data-bs-target="#staticBackdrop{{forloop.counter}}">Delete</a></li>
+
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>                                                      
+                                                    {% endfor %}
+                                                    <!-- end tr -->
+                                                </tbody><!-- end tbody -->
+                                            </table><!-- end table -->
+                                        </div><!-- end table responsive -->
+
+                                        <div class="row g-0 text-center text-sm-start">
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <p class="mb-sm-0">Showing 1 to 10 of 57 entries</p>
+                                                </div>
+                                            </div>
+                                            <!-- end col -->
+                                            <div class="col-sm-6">
+                                                <ul class="pagination pagination-rounded justify-content-center justify-content-sm-end mb-sm-0">
+                                                    <li class="page-item disabled">
+                                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a href="#" class="page-link">1</a>
+                                                    </li>
+                                                    <li class="page-item active">
+                                                        <a href="#" class="page-link">2</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a href="#" class="page-link">3</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a href="#" class="page-link">4</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a href="#" class="page-link">5</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
+                                                    </li>
+                                                </ul><!-- end ul -->
+                                            </div><!-- end col -->
+                                        </div><!-- end row -->
+                                        
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+                {% for i in employers %}
+                <!-- staticBackdrop Modal -->
+                <div class="modal fade" id="staticBackdrop{{forloop.counter}}" data-bs-backdrop="static"
+                    data-bs-keyboard="false" tabindex="-1" role="dialog"
+                    aria-labelledby="staticBackdropLabel{{forloop.counter}}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <form action="{% url 'delete_employee' i.code %}">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel{{forloop.counter}}">{{i.name}}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                    </button>
+                                </div>
+                                <!-- end modalheader -->
+                                <div class="modal-body">
+                                    <p>
+                                        Are you sure you want to delete this employer? This action cannot be undone.
+                                    </p>
+                                </div>
+                                <!-- end modalbody -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Understood</button>
+                                </div>
+                                <!-- end modalfooter -->
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- end modal -->                  
+                {% endfor %}
+                
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> &copy; Vuesy.
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-end d-none d-sm-block">
+                                    Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <!-- end main content-->
+{% endblock content %}
+    

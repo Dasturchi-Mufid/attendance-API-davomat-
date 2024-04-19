@@ -25,6 +25,8 @@
         <link href="{% static 'dashboard/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="{% static 'dashboard/css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+                <!-- Plugins css -->
+                <link href="{% static 'dashboard/libs/dropzone/min/dropzone.min.css' %}" rel="stylesheet" type="text/css" />
 
     </head>
 
@@ -76,7 +78,16 @@
                                             <span data-key="t-dashboard">Dashboard</span>
                                         </a>
                                     </li>
-        
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-pages" role="button">
+                                            <i class="uil-user"></i>
+                                            <span data-key="t-apps">Employees</span> <div class="arrow-down"></div>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="topnav-pages">
+
+                                            <a href="{% url 'create_employee' %}" class="dropdown-item" data-key="t-calendar">Create</a>
+                                            <a href="{% url 'list_employee' %}" class="dropdown-item" data-key="t-chat">List</a>
+                                    </li>
                                 </ul>
                             </div>
                         </nav>
@@ -313,6 +324,9 @@
 <script src="{% static 'dashboard/libs/metismenujs/metismenujs.min.js' %}"></script>
 <script src="{% static 'dashboard/libs/simplebar/simplebar.min.js' %}"></script>
 <script src="{% static 'dashboard/libs/feather-icons/feather.min.js' %}"></script>
+
+<!-- Plugins js -->
+<script src="{% static 'dashboard/libs/dropzone/min/dropzone.min.js' %}"></script>
 
 <!-- apexcharts -->
 <script src="{% static 'dashboard/libs/apexcharts/apexcharts.min.js' %}"></script>

@@ -1,0 +1,83 @@
+{% extends "dashboard/base.html" %}
+
+
+{% block content %}
+<!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header justify-content-between d-flex align-items-center">
+                                        <h4 class="card-title">Create Employee</h4>
+                                    </div><!-- end card header -->
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <form method="post" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <div class="mb-3 row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Name</label>
+                                                        <div class="col-md-10">
+                                                            <input class="form-control" type="text" id="example-text-input" name="name" value="{{employer.name}}" required>
+                                                        </div>
+                                                    </div><!-- end row -->
+                                                    <div class="row mb-3">
+                                                        <label class="col-md-2 col-form-label">Status</label>
+                                                        <div class="col-md-10">
+                                                            <select class="form-control" name="status" required>
+                                                                {% for value, label in choices %}
+                                                                <option value="{{value}}" {% if value == employer.status %} selected{% endif %}>{{label}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div><!-- end row -->
+                                                    <div class="row mb-3">
+                                                        <label class="col-md-2 col-form-label">Upload file</label>
+                                                        <div class="col-md-10">
+                                                            <div>
+                                                                <a href="{{employer.avatar.url}}">{{employer.avatar.url}}</a>
+                                                            </div>
+                                                            <input type="file" name="avatar" accept="image/*">
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center mt-4">
+                                                        <button type="submit" class="btn btn-primary">Send
+                                                            Files
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div><!-- end col -->
+                                        </div><!-- end row -->
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+
+                    </div> <!-- container-fluid -->
+                </div><!-- End Page-content -->
+
+                
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> &copy; Vuesy.
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-end d-none d-sm-block">
+                                    Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <!-- end main content-->
+{% endblock content %}
+    
