@@ -55,21 +55,26 @@ class Attendance(models.Model):
     """
 
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    come_in = models.DateTimeField(auto_now_add=True)
+    come_in = models.DateTimeField(blank=True)
     come_out = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         """
         Returns a string representation of the attendance record.
         """
-        return f"{self.employee.name} {str(self.time_in)} - {str(self.time_out)}"
+        return f"{self.employee.name} {str(self.come_in)} - {str(self.come_out)}"
+
     
     def save(self, *args, **kwargs):
         """
         Saves the attendance record and updates come_in and come_out fields based on whether it's a new record or an update.
         """
-        if self.pk:
-            self.come_out = datetime.now()
-        else:
-            self.come_in = datetime.now()
+        if not self.pk:
+            obj = Attendance.objects.filter(employee=self.employee, come_out__isnull=True).first()
+            if obj:
+                obj.come_out = datetime.now()
+                obj.save()
+                return
+            else:
+                self.come_in = datetime.now()
         super(Attendance, self).save(*args, **kwargs)
