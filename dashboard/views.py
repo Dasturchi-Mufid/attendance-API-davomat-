@@ -1,13 +1,25 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.core.paginator import Paginator, PageNotAnInteger,EmptyPage
 
 from datetime import datetime
 
 
 from .funcs import staff_required
 from . import models
+
+
+def paginator_page(List,num,request):
+    paginator = Paginator(List,num)
+    page = request.GET.get('page')
+    try:
+        List = paginator.page(page)
+    except PageNotAnInteger:
+        List = paginator.page(1)
+    except EmptyPage:
+        List = paginator.page(paginator.num_pages)
+    return List
 
 @staff_required
 def index(request):
@@ -51,7 +63,7 @@ def list_employee(request):
     employers = models.Employee.objects.all()
     choices = models.Employee.status.field.choices
     context = { 
-        'employers': employers,
+        'employers': paginator_page(employers,10,request),
         'choices': choices,
         }
     return render(request,'employee/list.html',context)
@@ -77,6 +89,13 @@ def edit_employee(request, code):
         }
     return render(request,'employee/edit.html',context)
 
+
+@staff_required
+def history_employee(request,code):
+    employer = models.Employee.objects.get(code=code)
+    attendance = models.Attendance.objects.filter(employee=employer)[::-1]
+    context = {'attendance':paginator_page(attendance,10,request)}
+    return render(request,'employee/history.html',context)
 
 @staff_required
 def delete_employee(request, code):
@@ -150,3 +169,4 @@ def attendance_list(request):
         employers = models.Attendance.objects.filter(**filter_items)
     context = {'employers': employers}
     return render(request, 'attendance/list.html',context)
+

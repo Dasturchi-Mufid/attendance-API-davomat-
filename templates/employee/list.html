@@ -17,7 +17,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <h5 class="card-title">Employee List <span class="text-muted fw-normal ms-2">({{employers|length}})</span></h5>
+                                                    <h5 class="card-title">Employee List <span class="text-muted fw-normal ms-2">({{employers.paginator.count}})</span></h5>
                                                 </div>
                                             </div><!-- end col -->
                 
@@ -83,6 +83,7 @@
                                                         </th>
                                                         <th scope="col">Name</th>
                                                         <th scope="col">Status</th>
+                                                        <th>History</th>
                                                         <th style="width: 80px; min-width: 80px;">Action</th>
                                                     </tr><!-- end tr -->
                                                 </thead><!-- end thead -->
@@ -97,6 +98,11 @@
                                                             <a class="text-body fw-medium">{{i.name}}</a>
                                                         </td>
                                                         <td><span class="badge badge-soft-primary mb-0">{{i.get_status_display}}</span></td>
+                                                        <td>
+                                                            <a class="btn btn-light btn-sm" href="{% url 'history_employee' i.code %}">
+                                                                <i class="uil-history"></i>
+                                                            </a>
+                                                        </td>
                                                         <td>
                                                             <div class="dropdown">
                                                                 <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -116,41 +122,45 @@
                                                 </tbody><!-- end tbody -->
                                             </table><!-- end table -->
                                         </div><!-- end table responsive -->
-
+                                        {% if employers.paginator.num_pages > 1 %}
                                         <div class="row g-0 text-center text-sm-start">
                                             <div class="col-sm-6">
-                                                <div>
-                                                    <p class="mb-sm-0">Showing 1 to 10 of 57 entries</p>
-                                                </div>
+                                                <!-- <div>
+                                                    <p class="mb-sm-0">Showing {{employers.number}} to 10 of {{employers.paginator.count}} entries</p>
+                                                </div> -->
                                             </div>
                                             <!-- end col -->
                                             <div class="col-sm-6">
                                                 <ul class="pagination pagination-rounded justify-content-center justify-content-sm-end mb-sm-0">
+                                                    {% if employers.has_previous %}
+                                                    <li class="page-item">
+                                                        <a href="?page={{employers.previous_page_number }}" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                                                    </li>
+                                                    {% else %}
                                                     <li class="page-item disabled">
                                                         <a href="#" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
                                                     </li>
+                                                    {% endif %}
+                                                    {% for num in employers.paginator.page_range %}
+                                                        {% if num == employers.number %}
+                                                        <li class="page-item active">
+                                                            <a href="#" class="page-link">{{num}}</a>
+                                                        </li>
+                                                        {% elif num > employers.number|add:'-2' and num < employers.number|add:'2' %}
+                                                        <li class="page-item">
+                                                            <a href="?page={{ num }}" class="page-link">{{num}}</a>
+                                                        </li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if employers.has_next %}
                                                     <li class="page-item">
-                                                        <a href="#" class="page-link">1</a>
+                                                        <a href="?page={{ employers.next_page_number }}" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
                                                     </li>
-                                                    <li class="page-item active">
-                                                        <a href="#" class="page-link">2</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a href="#" class="page-link">3</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a href="#" class="page-link">4</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a href="#" class="page-link">5</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
-                                                    </li>
+                                                    {% endif %}
                                                 </ul><!-- end ul -->
                                             </div><!-- end col -->
                                         </div><!-- end row -->
-                                        
+                                        {% endif %}
                                     </div><!-- end card body -->
                                 </div><!-- end card -->
                             </div><!-- end col -->

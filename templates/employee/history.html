@@ -1,0 +1,114 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    {% if attendance %}
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body pb-3">
+                                    <div class="d-flex align-items-start">
+                                        <div class="flex-grow-1">
+                                            <h5 class="card-title mb-2">History of Employee</h5>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <div class="table-responsive">
+                                            <table class="table project-list-table table-nowrap align-middle table-borderless mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">№</th>
+                                                        <th scope="col">Employer</th>
+                                                        <th scope="col">Status</th>
+                                                        <th scope="col">ID</th>
+                                                        <th scope="col">Come in</th>
+                                                        <th scope="col">Come out</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for employer in attendance %}
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <img src="{{ employer.employee.avatar.url }}" alt="" class="avatar rounded-circle">
+                                                                </div>
+                                                                <div class="flex-grow-1">{{employer.employee.name}}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{employer.employee.get_status_display}}</td>
+                                                        <td>
+                                                        <span>{{employer.employee.id}}</span>
+                                                        </td>
+                                                        <td>
+                                                            {{employer.come_in}}
+                                                        </td>
+                                                        <td>
+                                                            {{employer.come_out}}
+                                                        </td>
+                                                    </tr>                                                     
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        {% if attendance.paginator.num_pages > 1 %}
+                                        <div class="row g-0 text-center text-sm-start">
+                                            <div class="col-sm-6">
+                                                <!-- <div>
+                                                    <p class="mb-sm-0">Showing {{employers.number}} to 10 of {{employers.paginator.count}} entries</p>
+                                                </div> -->
+                                            </div>
+                                            <!-- end col -->
+                                            <div class="col-sm-6">
+                                                <ul class="pagination pagination-rounded justify-content-center justify-content-sm-end mb-sm-0">
+                                                    {% if attendance.has_previous %}
+                                                    <li class="page-item">
+                                                        <a href="?page={{attendance.previous_page_number }}" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                                                    </li>
+                                                    {% else %}
+                                                    <li class="page-item disabled">
+                                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                                                    </li>
+                                                    {% endif %}
+                                                    {% for num in attendance.paginator.page_range %}
+                                                        {% if num == attendance.number %}
+                                                        <li class="page-item active">
+                                                            <a href="#" class="page-link">{{num}}</a>
+                                                        </li>
+                                                        {% elif num > attendance.number|add:'-2' and num < attendance.number|add:'2' %}
+                                                        <li class="page-item">
+                                                            <a href="?page={{ num }}" class="page-link">{{num}}</a>
+                                                        </li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if attendance.has_next %}
+                                                    <li class="page-item">
+                                                        <a href="?page={{ attendance.next_page_number }}" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
+                                                    </li>
+                                                    {% endif %}
+                                                </ul><!-- end ul -->
+                                            </div><!-- end col -->
+                                        </div><!-- end row -->
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end row -->
+                    {% endif %}
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+
+   
+            {% endblock content %}
+                
