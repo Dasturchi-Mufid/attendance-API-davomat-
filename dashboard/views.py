@@ -173,7 +173,6 @@ def attendance_list(request):
                     continue
                 filter_items[key] = value
         employers = models.Attendance.objects.filter(**filter_items)
-        print(filter_items)
     context = {'employers': employers}
     return render(request, 'attendance/list.html',context)
 
