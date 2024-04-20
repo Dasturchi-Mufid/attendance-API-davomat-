@@ -152,9 +152,15 @@ def attendance_list(request):
         for key, value in request.GET.items():
             if value:
                 if key == 'start_date':
-                    key = 'date__gte'
+                    values = value.split('-')
+                    year, month, day = int(values[0]),int(values[1]),int(values[2])
+                    key = 'come_in__gte'
+                    value = datetime(year=year,month=month,day=day)
                 elif key == 'end_date':    
-                    key = 'date__lte'
+                    values = value.split('-')
+                    year, month, day = int(values[0]),int(values[1]),int(values[2])
+                    key = 'come_in__lte'
+                    value = datetime(year=year,month=month,day=day)
                 elif key == 'name':
                     key = 'employee__name__icontains'
                 elif key == 'come' and value == 'come_in':
@@ -167,6 +173,7 @@ def attendance_list(request):
                     continue
                 filter_items[key] = value
         employers = models.Attendance.objects.filter(**filter_items)
+        print(filter_items)
     context = {'employers': employers}
     return render(request, 'attendance/list.html',context)
 
