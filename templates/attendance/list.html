@@ -1,0 +1,140 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    {% if employers %}
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body pb-3">
+                                    <div class="d-flex align-items-start">
+                                        <div class="flex-grow-1">
+                                            <h5 class="card-title mb-2">Today attendance</h5>
+                                        </div>
+                                        
+                                        <div class="flex-shrink-0">    
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalPopovers">
+                                                <i class="mdi mdi-filter-variant"></i>
+                                            </button>       
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <div class="table-responsive">
+                                            <table class="table project-list-table table-nowrap align-middle table-borderless mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">№</th>
+                                                        <th scope="col">Employer</th>
+                                                        <th scope="col">Status</th>
+                                                        <th scope="col">ID</th>
+                                                        <th scope="col">Come in</th>
+                                                        <th scope="col">Come out</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for employer in employers %}
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <img src="{{ employer.employee.avatar.url }}" alt="" class="avatar rounded-circle">
+                                                                </div>
+                                                                <div class="flex-grow-1">{{employer.employee.name}}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{employer.employee.get_status_display}}</td>
+                                                        <td>
+                                                        <span>{{employer.employee.id}}</span>
+                                                        </td>
+                                                        <td>
+                                                            {{employer.come_in}}
+                                                        </td>
+                                                        <td>
+                                                            {{employer.come_out}}
+                                                        </td>
+                                                    </tr>                                                     
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end row -->
+                    {% endif %}
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+
+            <!-- Modals -->
+            <div class="modal fade" id="exampleModalPopovers" tabindex="-1" aria-labelledby="exampleModalPopoversLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog">
+                    <form>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalPopoversLabel">Filter Attendance</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3 row">
+                                    <label for="example-text-input" class="col-md-2 col-form-label">Name</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" type="text" name="name" id="example-text-input">
+                                    </div>
+                                </div>
+                                <div class="row mb-3 mt-3 mt-xl-0">
+                                    <label for="example-date-input" class="col-md-2 col-form-label">Date Start</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" type="date" name="start_date" id="example-date-input">
+                                    </div>
+                                </div>
+                                <div class="row mb-3 mt-3 mt-xl-0">
+                                    <label for="example-date-input" class="col-md-2 col-form-label">Date End</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" type="date" name="end_date" id="example-date-input">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="radio" name="come" value="all" id="come1" checked="">
+                                            <label class="form-check-label" for="come1">
+                                                All
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="radio" name="come" value="come_in" id="come2">
+                                            <label class="form-check-label" for="come2">
+                                                Come In(But not come out)
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="radio" name="come" value="come_out" id="come3">
+                                            <label class="form-check-label" for="come3">
+                                                Come Out()
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+   
+            {% endblock content %}
+                
